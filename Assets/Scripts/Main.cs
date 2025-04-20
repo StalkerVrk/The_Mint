@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 using System;
+using Unity.VisualScripting;
 
 public class Main : MonoBehaviour
 {
@@ -14,12 +15,18 @@ public class Main : MonoBehaviour
     public GameObject effectPointOne;
     public GameObject buttonRocket;
     public AudioSource audioClick;
+    
+    [SerializeField] private SpriteRenderer playerSprite;
+    [SerializeField] private Sprite originalSprite;  
+    [SerializeField] private Sprite clickedSprite;  
+    private bool isClickProcessed = false;
 
     public void Start()
     {
         audioClick = GetComponent<AudioSource>();
         money = PlayerPrefs.GetInt("money");
         totalMoney = PlayerPrefs.GetInt("totalMoney");
+
         if (totalMoney > 10)
         {
             StartCoroutine(AutoFarmClick());
@@ -30,10 +37,25 @@ public class Main : MonoBehaviour
     void Update()
     {
         moneyText.text = money.ToString();
+
     }
 
-    public void ButtonClick()
+    public void ButtonClickUp()
     {
+        if (!isClickProcessed)
+        {
+            isClickProcessed = true;
+
+            // Меняем спрайт на clickedSprite
+            if (playerSprite != null && clickedSprite != null)
+            {
+                playerSprite.sprite = clickedSprite;
+            }
+
+            // Запускаем корутину для возврата спрайта через 1 секунду
+            StartCoroutine(ResetSpriteAfterDelay(0.1f));
+        }
+
         money++;
         totalMoney++;
         PlayerPrefs.SetInt("money", money);
@@ -49,10 +71,10 @@ public class Main : MonoBehaviour
         buttonRocket.GetComponent<RectTransform>().localScale = new Vector3(0.98f, 0.97f);
         audioClick.Play();
     }
-    public void ButtonClickUp()
+
+    public void ButtonClick()
     {
         buttonRocket.GetComponent<RectTransform>().localScale = new Vector3(1, 1);
-
     }
 
     public void ToAchievements()
@@ -83,5 +105,17 @@ public class Main : MonoBehaviour
     private void OnApplicationQuit()
     {
         PlayerPrefs.SetString("LastSession", DateTime.Now.ToString());
+    }
+
+    private IEnumerator ResetSpriteAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (playerSprite != null && originalSprite != null)
+        {
+            playerSprite.sprite = originalSprite;
+        }
+
+        isClickProcessed = false;
     }
 }

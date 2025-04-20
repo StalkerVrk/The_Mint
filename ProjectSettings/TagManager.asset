@@ -38,6 +38,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: MainLayers
+    uniqueID: 3709568295
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ButtonClickLayer
+    uniqueID: 839081715
+    locked: 0
+  - name: MenuLayer
+    uniqueID: 2283239139
     locked: 0
