@@ -46,13 +46,11 @@ public class Main : MonoBehaviour
         {
             isClickProcessed = true;
 
-            // Меняем спрайт на clickedSprite
             if (playerSprite != null && clickedSprite != null)
             {
                 playerSprite.sprite = clickedSprite;
             }
 
-            // Запускаем корутину для возврата спрайта через 1 секунду
             StartCoroutine(ResetSpriteAfterDelay(0.1f));
         }
 
