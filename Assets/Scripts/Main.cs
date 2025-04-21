@@ -21,6 +21,7 @@ public class Main : MonoBehaviour
     [SerializeField] private Sprite clickedSprite;  
     private bool isClickProcessed = false;
 
+
     public void Start()
     {
         audioClick = GetComponent<AudioSource>();
@@ -115,5 +116,16 @@ public class Main : MonoBehaviour
         }
 
         isClickProcessed = false;
+
+        //Refactor - убрать telegram из метода замены спрайтов
+        TelegramIntegration telegramIntegration = GetComponent<TelegramIntegration>();
+        if (telegramIntegration != null)
+        {
+            telegramIntegration.SendScore(totalMoney); 
+        }
+        else
+        {
+            Debug.LogWarning("TelegramIntegration не найден на объекте");
+        }
     }
 }
